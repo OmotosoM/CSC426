@@ -8,14 +8,23 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
         body { background: radial-gradient(circle at center, #1e293b, #0f172a); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
         .auth-container { background: #ffffff; padding: 36px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); width: 100%; max-width: 380px; }
-        .auth-header { margin-bottom: 28px; text-align: center; }
+        .auth-header { margin-bottom: 24px; text-align: center; }
         .auth-header h2 { color: #1e293b; font-size: 26px; font-weight: 700; }
         .auth-header p { color: #64748b; font-size: 14px; margin-top: 4px; }
-        .input-wrapper { margin-bottom: 18px; }
+        .input-wrapper { margin-bottom: 18px; position: relative; }
         .input-wrapper label { display: block; margin-bottom: 6px; color: #334155; font-weight: 600; font-size: 14px; }
         .input-field { width: 100%; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; color: #1e293b; outline: none; transition: all 0.2s ease; }
         .input-field:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); }
-        .action-deck { display: flex; gap: 12px; margin-top: 26px; }
+        .password-container { position: relative; display: flex; align-items: center; }
+        .toggle-password { position: absolute; right: 12px; background: #f1f5f9; border: 1px solid #cbd5e0; padding: 4px 8px; font-size: 12px; font-weight: 600; border-radius: 4px; cursor: pointer; color: #475569; user-select: none; }
+        .toggle-password:hover { background: #e2e8f0; }
+        
+        /* Remember Me Styles */
+        .remember-wrapper { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; cursor: pointer; user-select: none; }
+        .remember-wrapper input { width: 16px; height: 16px; accent-color: #6366f1; cursor: pointer; }
+        .remember-wrapper label { color: #475569; font-size: 14px; font-weight: 500; cursor: pointer; }
+
+        .action-deck { display: flex; gap: 12px; margin-top: 24px; }
         .btn { flex: 1; padding: 11px; font-size: 15px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease; }
         .btn-primary { background-color: #6366f1; color: #ffffff; }
         .btn-primary:hover { background-color: #4f46e5; }
@@ -24,6 +33,7 @@
         .status-alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none; font-size: 14px; font-weight: 500; text-align: center; animation: fadeIn 0.3s ease; }
         .status-success { background-color: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; display: block; }
         .status-error { background-color: #fee2e2; color: #7f1d1d; border: 1px solid #fecaca; display: block; }
+        .demo-hint { text-align: center; color: #64748b; font-size: 13px; margin-top: 20px; border-top: 1px dashed #e2e8f0; padding-top: 14px; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -44,11 +54,23 @@
             </div>
             <div class="input-wrapper">
                 <label for="uKey">Password</label>
-                <input type="password" id="uKey" class="input-field" placeholder="••••••••">
+                <div class="password-container">
+                    <input type="password" id="uKey" class="input-field" style="padding-right: 60px;" placeholder="••••••••">
+                    <span class="toggle-password" id="passwordToggle">Show</span>
+                </div>
             </div>
+
+            <div class="remember-wrapper">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe">Remember me</label>
+            </div>
+
             <div class="action-deck">
-                <button type="button" class="btn btn-secondary" id="clearBtn">Cancel</button>
+                <button type="button" class="btn btn-secondary" id="clearBtn">Reset</button>
                 <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+            <div class="demo-hint">
+                Demo user: <strong>admin</strong> / <strong>Password123</strong>
             </div>
         </form>
     </div>
@@ -57,14 +79,26 @@
         const gatekeeperForm = document.getElementById('authForm');
         const userField = document.getElementById('uid');
         const passField = document.getElementById('uKey');
+        const rememberCheckbox = document.getElementById('rememberMe');
         const alertBanner = document.getElementById('alertBanner');
         const clearBtn = document.getElementById('clearBtn');
+        const passwordToggle = document.getElementById('passwordToggle');
 
         function triggerAlert(messageText, successState) {
             alertBanner.textContent = messageText;
             alertBanner.className = 'status-alert ' + (successState ? 'status-success' : 'status-error');
             alertBanner.style.display = 'block';
         }
+
+        passwordToggle.addEventListener('click', function() {
+            if (passField.type === 'password') {
+                passField.type = 'text';
+                passwordToggle.textContent = 'Hide';
+            } else {
+                passField.type = 'password';
+                passwordToggle.textContent = 'Show';
+            }
+        });
 
         gatekeeperForm.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -77,7 +111,7 @@
             }
 
             if (processPass.length < 6) {
-                triggerAlert('Security Error: Password fails minimum length rules.', false);
+                triggerAlert('Security Error: Password must be at least 6 characters.', false);
                 return;
             }
 
@@ -87,6 +121,9 @@
         clearBtn.addEventListener('click', function() {
             gatekeeperForm.reset();
             alertBanner.style.display = 'none';
+            passField.type = 'password';
+            passwordToggle.textContent = 'Show';
+            rememberCheckbox.checked = false;
         });
     </script>
 </body>
