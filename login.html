@@ -116,17 +116,18 @@
             const processUser = userField.value.trim();
             const processPass = passField.value.trim();
 
+            // 1. Basic Empty Validation Check
             if (!processUser || !processPass) {
-                triggerAlert('Validation Error: All credentials are required.', false);
+                triggerAlert('Validation Error: All fields are required.', false);
                 return;
             }
 
-            if (processPass.length < 6) {
-                triggerAlert('Security Error: Password must be at least 6 characters.', false);
-                return;
+            // 2. Exact Match Check against Demo Credentials
+            if (processUser === 'admin' && processPass === 'Password123') {
+                triggerAlert('Authentication Successful! Welcome to your dashboard.', true);
+            } else {
+                triggerAlert('Authentication Failed: Invalid username or password.', false);
             }
-
-            triggerAlert('Authentication Successful! Welcome to the portal.', true);
         });
 
         clearBtn.addEventListener('click', function() {
