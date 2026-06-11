@@ -7,10 +7,14 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
         body { background: radial-gradient(circle at center, #1e293b, #0f172a); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 16px; }
-        .auth-container { background: #ffffff; padding: 36px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); width: 100%; max-width: 380px; }
+        .auth-container { background: #ffffff; padding: 36px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); width: 100%; max-width: 380px; transition: all 0.3s ease; }
+        
+        /* Header Configurations */
         .auth-header { margin-bottom: 24px; text-align: center; }
         .auth-header h2 { color: #1e293b; font-size: 26px; font-weight: 700; }
         .auth-header p { color: #64748b; font-size: 14px; margin-top: 4px; }
+        
+        /* Input and Form Groups */
         .input-wrapper { margin-bottom: 18px; position: relative; }
         .input-wrapper label { display: block; margin-bottom: 6px; color: #334155; font-weight: 600; font-size: 14px; }
         .input-field { width: 100%; padding: 10px 14px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 15px; color: #1e293b; outline: none; transition: all 0.2s ease; }
@@ -32,73 +36,92 @@
         .btn-secondary { background-color: #f1f5f9; color: #475569; }
         .btn-secondary:hover { background-color: #e2e8f0; }
         
+        /* Notifications & Alerts */
         .status-alert { padding: 12px; border-radius: 8px; margin-bottom: 20px; display: none; font-size: 14px; font-weight: 500; text-align: center; animation: fadeIn 0.3s ease; }
-        .status-success { background-color: #dcfce7; color: #14532d; border: 1px solid #bbf7d0; display: block; }
         .status-error { background-color: #fee2e2; color: #7f1d1d; border: 1px solid #fecaca; display: block; }
         .demo-hint { text-align: center; color: #64748b; font-size: 13px; margin-top: 20px; border-top: 1px dashed #e2e8f0; padding-top: 14px; }
+        
+        /* Dashboard Screen View (Hidden by Default) */
+        .dashboard-view { display: none; text-align: left; animation: fadeIn 0.4s ease; }
+        .dashboard-view h3 { color: #1e293b; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+        .dashboard-view p { color: #475569; font-size: 15px; margin-bottom: 24px; line-height: 1.5; }
+        .btn-logout { background-color: #ef4444; color: #ffffff; width: auto; padding: 10px 24px; display: inline-block; }
+        .btn-logout:hover { background-color: #dc2626; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="auth-container">
-        <div class="auth-header">
-            <h2>AAUA Student Portal</h2>
-            <p>Sign in to continue to your dashboard</p>
-        </div>
-        
-        <div id="alertBanner" class="status-alert"></div>
-        
-        <form id="authForm">
-            <div class="input-wrapper">
-                <label for="uid">Username</label>
-                <input type="text" id="uid" class="input-field" placeholder="Username or email">
+        <div id="loginFormSection">
+            <div class="auth-header">
+                <h2>AAUA Student Portal</h2>
+                <p>Sign in to continue to your dashboard</p>
             </div>
-            <div class="input-wrapper">
-                <label for="uKey">Password</label>
-                <div class="password-container">
-                    <input type="password" id="uKey" class="input-field" style="padding-right: 44px;" placeholder="••••••••">
-                    <button type="button" class="toggle-password" id="passwordToggle" aria-label="Toggle password visibility">
-                        <svg id="eyeIcon" viewBox="0 0 24 24">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </button>
+            
+            <div id="errorBanner" class="status-alert status-error"></div>
+            
+            <form id="authForm">
+                <div class="input-wrapper">
+                    <label for="uid">Username</label>
+                    <input type="text" id="uid" class="input-field" placeholder="Username or email">
                 </div>
-            </div>
+                <div class="input-wrapper">
+                    <label for="uKey">Password</label>
+                    <div class="password-container">
+                        <input type="password" id="uKey" class="input-field" style="padding-right: 44px;" placeholder="••••••••">
+                        <button type="button" class="toggle-password" id="passwordToggle" aria-label="Toggle password visibility">
+                            <svg id="eyeIcon" viewBox="0 0 24 24">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
 
-            <div class="remember-wrapper">
-                <input type="checkbox" id="rememberMe">
-                <label for="rememberMe">Remember me</label>
-            </div>
+                <div class="remember-wrapper">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
 
-            <div class="action-deck">
-                <button type="button" class="btn btn-secondary" id="clearBtn">Reset</button>
-                <button type="submit" class="btn btn-primary">Login</button>
-            </div>
-            <div class="demo-hint">
-                Demo user: <strong>admin</strong> / <strong>Password123</strong>
-            </div>
-        </form>
+                <div class="action-deck">
+                    <button type="button" class="btn btn-secondary" id="clearBtn">Reset</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                <div class="demo-hint">
+                    Demo user: <strong>admin</strong> / <strong>Password123</strong>
+                </div>
+            </form>
+        </div>
+
+        <div id="dashboardSection" class="dashboard-view">
+            <h3>Dashboard</h3>
+            <p>Welcome to your student dashboard, <strong id="displayUser">student</strong>.</p>
+            <button type="button" class="btn btn-logout" id="logoutBtn">Logout</button>
+        </div>
     </div>
 
     <script>
+        const loginFormSection = document.getElementById('loginFormSection');
+        const dashboardSection = document.getElementById('dashboardSection');
         const gatekeeperForm = document.getElementById('authForm');
         const userField = document.getElementById('uid');
         const passField = document.getElementById('uKey');
         const rememberCheckbox = document.getElementById('rememberMe');
-        const alertBanner = document.getElementById('alertBanner');
+        const errorBanner = document.getElementById('errorBanner');
         const clearBtn = document.getElementById('clearBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         const passwordToggle = document.getElementById('passwordToggle');
         const eyeIcon = document.getElementById('eyeIcon');
+        const displayUser = document.getElementById('displayUser');
 
         const eyeOpenPath = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`;
         const eyeClosedPath = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`;
 
-        function triggerAlert(messageText, successState) {
-            alertBanner.textContent = messageText;
-            alertBanner.className = 'status-alert ' + (successState ? 'status-success' : 'status-error');
-            alertBanner.style.display = 'block';
+        function triggerError(messageText) {
+            errorBanner.textContent = messageText;
+            errorBanner.style.display = 'block';
         }
 
         passwordToggle.addEventListener('click', function() {
@@ -107,6 +130,7 @@
                 eyeIcon.innerHTML = eyeClosedPath;
             } else {
                 passField.type = 'password';
+                eyeOpenPath;
                 eyeIcon.innerHTML = eyeOpenPath;
             }
         });
@@ -116,23 +140,38 @@
             const processUser = userField.value.trim();
             const processPass = passField.value.trim();
 
-            // 1. Basic Empty Validation Check
+            errorBanner.style.display = 'none';
+
             if (!processUser || !processPass) {
-                triggerAlert('Validation Error: All fields are required.', false);
+                triggerError('Validation Error: All fields are required.');
                 return;
             }
 
-            // 2. Exact Match Check against Demo Credentials
+            // Authentication Match Matrix
             if (processUser === 'admin' && processPass === 'Password123') {
-                triggerAlert('Authentication Successful! Welcome to your dashboard.', true);
+                // Route user smoothly into the dashboard view interface
+                displayUser.textContent = processUser;
+                loginFormSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
             } else {
-                triggerAlert('Authentication Failed: Invalid username or password.', false);
+                triggerError('Authentication Failed: Invalid username or password.');
             }
         });
 
+        // Reset configuration handler
         clearBtn.addEventListener('click', function() {
             gatekeeperForm.reset();
-            alertBanner.style.display = 'none';
+            errorBanner.style.display = 'none';
+            passField.type = 'password';
+            eyeIcon.innerHTML = eyeOpenPath;
+            rememberCheckbox.checked = false;
+        });
+
+        // Logout state handler
+        logoutBtn.addEventListener('click', function() {
+            gatekeeperForm.reset();
+            dashboardSection.style.display = 'none';
+            loginFormSection.style.display = 'block';
             passField.type = 'password';
             eyeIcon.innerHTML = eyeOpenPath;
             rememberCheckbox.checked = false;
