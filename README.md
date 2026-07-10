@@ -1,4 +1,4 @@
-# CSC426: Software Engineering Assignment
+# CSC426: Software Engineering Assignment WK1
 
 This repository contains the source code for my practical Software Engineering assignment, built with HTML, CSS, and JavaScript, and deployed live using Vercel.
 
