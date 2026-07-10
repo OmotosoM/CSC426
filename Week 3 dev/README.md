@@ -1,7 +1,6 @@
 Software Requirement Specification (SRS) for IRO (Issues Reporting Outlet)
 
 
-1.0 Introduction
 
 
 1.1 Purpose
