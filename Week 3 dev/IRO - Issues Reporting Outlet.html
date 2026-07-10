@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRO — Issues Reporting Outlet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&family=IBM+Plex+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#20303A;
+    --paper:#EEE9DC;
+    --panel:#FFFFFF;
+    --indigo:#2D4159;
+    --gold:#C08A28;
+    --clay:#A5432E;
+    --sage:#5C7156;
+    --line:#D8D1BF;
+    --muted:#6B6459;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    line-height:1.5;
+  }
+  header{
+    padding:32px 24px 20px;
+    border-bottom:3px solid var(--indigo);
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    max-width:1000px;
+    margin:0 auto;
+  }
+  .brand h1{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:800;
+    font-size:clamp(28px,4vw,40px);
+    margin:0;
+    letter-spacing:-0.02em;
+  }
+  .brand span{
+    font-family:'Space Mono',monospace;
+    font-size:13px;
+    color:var(--muted);
+  }
+  .tag{
+    max-width:1000px;
+    margin:6px auto 0;
+    color:var(--muted);
+    font-size:14px;
+  }
+  main{
+    max-width:1000px;
+    margin:0 auto;
+    padding:28px 24px 60px;
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:24px;
+  }
+  @media (max-width:760px){
+    main{grid-template-columns:1fr;}
+  }
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:22px;
+  }
+  .panel h2{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-size:15px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    margin:0 0 18px;
+    color:var(--indigo);
+  }
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin:14px 0 6px;
+  }
+  label .opt{
+    font-weight:400;
+    color:var(--muted);
+    text-transform:none;
+    letter-spacing:0;
+  }
+  input[type=text], select, textarea{
+    width:100%;
+    padding:10px 11px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:14px;
+    background:#FCFAF4;
+    color:var(--ink);
+  }
+  textarea{resize:vertical;min-height:80px;}
+  .priority-row{display:flex;gap:8px;margin-top:6px;}
+  .priority-row button{
+    flex:1;
+    padding:9px 0;
+    border:1px solid var(--line);
+    background:#FCFAF4;
+    border-radius:3px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    color:var(--muted);
+  }
+  .priority-row button.active[data-p="Low"]{background:var(--sage);color:#fff;border-color:var(--sage);}
+  .priority-row button.active[data-p="Medium"]{background:var(--gold);color:#fff;border-color:var(--gold);}
+  .priority-row button.active[data-p="High"]{background:var(--clay);color:#fff;border-color:var(--clay);}
+  .submit-btn{
+    margin-top:20px;
+    width:100%;
+    padding:13px;
+    background:var(--indigo);
+    color:#fff;
+    border:none;
+    border-radius:3px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .submit-btn:hover{background:#233245;}
+  .status-msg{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--sage);
+    display:none;
+  }
+  .feed-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .count{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+  }
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--muted);
+  }
+  .empty-state .glyph{
+    font-size:34px;
+    margin-bottom:10px;
+  }
+  .report{
+    border:1px solid var(--line);
+    border-left:4px solid var(--indigo);
+    border-radius:3px;
+    padding:14px 16px;
+    margin-bottom:12px;
+    background:#FCFAF4;
+  }
+  .report.High{border-left-color:var(--clay);}
+  .report.Medium{border-left-color:var(--gold);}
+  .report.Low{border-left-color:var(--sage);}
+  .report-top{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .report-cat{
+    font-weight:600;
+    font-size:14px;
+  }
+  .badge{
+    font-family:'Space Mono',monospace;
+    font-size:11px;
+    font-weight:700;
+    padding:3px 8px;
+    border-radius:10px;
+    color:#fff;
+    white-space:nowrap;
+  }
+  .badge.High{background:var(--clay);}
+  .badge.Medium{background:var(--gold);}
+  .badge.Low{background:var(--sage);}
+  .report-body{
+    font-size:14px;
+    margin:8px 0;
+    color:var(--ink);
+  }
+  .report-meta{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:var(--muted);
+    font-family:'Space Mono',monospace;
+    margin-top:6px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>IRO</h1>
+    <span>Issues Reporting Outlet</span>
+  </div>
+  <p class="tag">Connecting AAUA students and Akungba, Iwaro, Etioro &amp; Ayegunle indigenes to the issues that affect them both.</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>Report an issue</h2>
+    <form id="reportForm">
+      <label>Name <span class="opt">(optional — leave blank to stay anonymous)</span></label>
+      <input type="text" id="name" placeholder="e.g. Ayomide">
+
+      <label>Which best describes you?</label>
+      <select id="respondentType">
+        <option value="">Prefer not to say</option>
+        <option>AAUA Student</option>
+        <option>Indigene</option>
+      </select>
+
+      <label>Community of Residence *</label>
+      <select id="community" required>
+        <option value="">Select community</option>
+        <option>Ayegunle</option>
+        <option>Akungba</option>
+        <option>Etioro</option>
+        <option>Iwaro</option>
+      </select>
+
+      <label>Category *</label>
+      <select id="category" required>
+        <option value="">Select category</option>
+        <option>Water Scarcity</option>
+        <option>Security / Harassment</option>
+        <option>Poor Electricity Supply</option>
+        <option>Hike in Rent</option>
+        <option>Poor Roads</option>
+        <option>Other</option>
+      </select>
+
+      <label>Priority *</label>
+      <div class="priority-row" id="priorityRow">
+        <button type="button" data-p="Low">Low</button>
+        <button type="button" data-p="Medium">Medium</button>
+        <button type="button" data-p="High">High</button>
+      </div>
+
+      <label>Describe the issue *</label>
+      <textarea id="description" required placeholder="What happened, where, and when?"></textarea>
+
+      <button type="submit" class="submit-btn">Submit report</button>
+      <p class="status-msg" id="statusMsg">Report submitted. Thank you.</p>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="feed-header">
+      <h2>Recent reports</h2>
+      <span class="count" id="reportCount">0 reports</span>
+    </div>
+    <div id="feed"></div>
+  </section>
+</main>
+
+<script>
+  const STORAGE_KEY = "iro_reports";
+  let selectedPriority = null;
+
+  function escapeHtml(str){
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  document.getElementById('priorityRow').addEventListener('click', (e) => {
+    if (e.target.tagName !== 'BUTTON') return;
+    document.querySelectorAll('#priorityRow button').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    selectedPriority = e.target.dataset.p;
+  });
+
+  function getReports(){
+    try{
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function saveReports(reports){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+  }
+
+  function renderFeed(){
+    const reports = getReports().slice().sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const feed = document.getElementById('feed');
+    document.getElementById('reportCount').textContent = reports.length + (reports.length === 1 ? " report" : " reports");
+
+    if(reports.length === 0){
+      feed.innerHTML = `<div class="empty-state"><div class="glyph">◇</div>No reports yet. Be the first to submit.</div>`;
+      return;
+    }
+
+    feed.innerHTML = reports.map(r => `
+      <div class="report ${escapeHtml(r.priority)}">
+        <div class="report-top">
+          <span class="report-cat">${escapeHtml(r.category)} — ${escapeHtml(r.community)}</span>
+          <span class="badge ${escapeHtml(r.priority)}">${escapeHtml(r.priority)}</span>
+        </div>
+        <div class="report-body">${escapeHtml(r.description)}</div>
+        <div class="report-meta">
+          <span>${escapeHtml(r.name)} · ${escapeHtml(r.respondentType || 'Not specified')}</span>
+          <span>${new Date(r.timestamp).toLocaleString()}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('reportForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const community = document.getElementById('community').value;
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value.trim();
+
+    if(!community || !category || !description || !selectedPriority){
+      alert('Please fill in community, category, priority and a description before submitting.');
+      return;
+    }
+
+    const nameField = document.getElementById('name').value.trim();
+    const respondentType = document.getElementById('respondentType').value;
+
+    const report = {
+      name: nameField === '' ? 'Anonymous' : nameField,
+      respondentType: respondentType === '' ? 'Not specified' : respondentType,
+      community,
+      category,
+      priority: selectedPriority,
+      description,
+      timestamp: new Date().toISOString()
+    };
+
+    const reports = getReports();
+    reports.push(report);
+    saveReports(reports);
+
+    document.getElementById('reportForm').reset();
+    document.getElementById('respondentType').value = '';
+    document.querySelectorAll('#priorityRow button').forEach(b => b.classList.remove('active'));
+    selectedPriority = null;
+
+    const status = document.getElementById('statusMsg');
+    status.style.display = 'block';
+    setTimeout(() => status.style.display = 'none', 2500);
+
+    renderFeed();
+  });
+
+  renderFeed();
+</script>
+
+</body>
+</html>
