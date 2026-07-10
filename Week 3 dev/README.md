@@ -1,12 +1,16 @@
 Software Requirement Specification (SRS) for IRO (Issues Reporting Outlet)
 1.0 Introduction
-1.1 Purpose IRO (Issues Reporting Outlet) is a feasibility prototype built to give AAUA students and residents of the surrounding communities — Akungba, Iwaro, Etioro and Ayegunle — a direct, low-friction way to flag issues affecting town-and-gown relations, rather than relying on informal word-of-mouth channels. 
+1.1 Purpose 
+IRO (Issues Reporting Outlet) is a feasibility prototype built to give AAUA students and residents of the surrounding communities (Akungba, Iwaro, Etioro and Ayegunle) a direct, low-friction way to flag issues affecting town-and-gown relations, rather than relying on informal word-of-mouth channels. 
+
 Questionnaire link: https://docs.google.com/forms/d/e/1FAIpQLSfKs9gl9Te2-fosplqKVyJLZY6MJxXCGOdxTLASZLIwhUJKXw/viewform?usp=publish-editor 
 
 Short link: https://tinyurl.com/week3-dev
 
 1.2 Scope This prototype is a Single Page Application (SPA) that lets a reporter submit an issue and immediately see it reflected in a live feed. Because of the assignment's time constraints, it uses the browser's localStorage instead of a real backend database, which keeps the system self-contained while still demonstrating anonymous, community-level issue capture and display.
-2.0 Overall Description 2.1 Operating Environment IRO runs entirely client-side in the browser — no server or installation required. It has been designed to work across Chrome, Firefox, Safari and Edge, on both desktop and mobile devices.
+2.0 Overall Description 
+2.1 Operating Environment IRO runs entirely client-side in the browser — no server or installation required. It has been designed to work across Chrome, Firefox, Safari and Edge, on both desktop and mobile devices.
+
 2.2 User Classes and Characteristics
 Reporters: students and community residents who need a quick, low-bandwidth way to log an issue, with the option to stay anonymous.
 Observers: community leaders or campus staff who monitor the feed to stay aware of what's being reported and follow up where needed.
