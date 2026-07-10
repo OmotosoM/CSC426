@@ -1,6 +1,8 @@
 Software Requirement Specification (SRS) for IRO (Issues Reporting Outlet)
+
 1.0 Introduction
 1.1 Purpose 
+
 IRO (Issues Reporting Outlet) is a feasibility prototype built to give AAUA students and residents of the surrounding communities (Akungba, Iwaro, Etioro and Ayegunle) a direct, low-friction way to flag issues affecting town-and-gown relations, rather than relying on informal word-of-mouth channels. 
 
 Questionnaire link: https://docs.google.com/forms/d/e/1FAIpQLSfKs9gl9Te2-fosplqKVyJLZY6MJxXCGOdxTLASZLIwhUJKXw/viewform?usp=publish-editor 
