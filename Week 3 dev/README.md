@@ -27,18 +27,42 @@ This prototype is a Single Page Application (SPA) that lets a reporter submit an
 
 2.1 Operating Environment
 IRO runs entirely client-side in the browser — no server or installation required. It has been designed to work across Chrome, Firefox, Safari and Edge, on both desktop and mobile devices.
+
+
 2.2 User Classes and Characteristics
+
+
 Reporters: students and community residents who need a quick, low-bandwidth way to log an issue, with the option to stay anonymous.
 Observers/Liaisons: community leaders or campus staff who monitor the feed to stay aware of what's being reported and follow up where needed.
+
+
 3.0 System Features & Functional Requirements (FR)
+
+
 3.1 Issue Submission Module
+
+
 FR-01 (Anonymous Reporting): The Name field is optional; if it is left blank, the system labels the submission as "Anonymous" rather than storing an empty value.
+
+
 FR-02 (Location Mapping): A community must be selected before a report can be submitted, restricted to the four host communities covered by this study: Ayegunle, Akungba, Etioro, or Iwaro.
+
+
 FR-03 (Categorization & Priority): Every report must include an issue category — Water Scarcity, Security/Harassment, Poor Electricity Supply, Hike in Rent, Poor Roads, or Other — and a priority level (Low, Medium, High). The category list mirrors the issue types identified in the questionnaire responses.
+
+
 FR-04 (Data Capture): On submission, the system packages all input fields together with an auto-generated timestamp into a single record.
+
+
 FR-09 (Respondent Type): The reporter may optionally indicate whether they are an AAUA Student or an Indigene, matching the first question on the questionnaire, to help distinguish the two audience groups in the data.
+
+
 3.2 Report Rendering Module
+
+
 FR-05 (Data Retrieval): The system reads previously saved reports back from local storage whenever the page loads.
+
+
 FR-06 (Chronological Display): Reports are displayed newest-first, in reverse-chronological order, on the dashboard.
 FR-07 (Empty State Handling): If no reports have been submitted yet, the dashboard shows the message: "No reports yet. Be the first to submit."
 FR-08 (Visual Hierarchy): Each report is tagged with a colour-coded badge based on its priority (High = Red, Medium = Gold, Low = Green) so urgency is visible at a glance.
